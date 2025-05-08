@@ -1,11 +1,108 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>DebilWiki</title>
-    <script src="script.js"></script>
+    <title>DEBIL WIKI — LOADING...</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #000;
+            color: #0f0;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        .header {
+            border-bottom: 1px dashed #0f0;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .loader {
+            font-size: 24px;
+            margin: 50px 0;
+        }
+        .article-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .article-card {
+            background: #111;
+            border: 1px solid #0f0;
+            padding: 10px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .article-card:hover {
+            background: #222;
+            transform: scale(1.05);
+        }
+        .search-box {
+            width: 80%;
+            padding: 10px;
+            margin: 20px 0;
+            background: #000;
+            color: #0f0;
+            border: 1px solid #0f0;
+            font-family: 'Courier New', monospace;
+        }
+        .blink {
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+    </style>
 </head>
 <body>
-    <h1>Добро пожаловать в DebilWiki!</h1>
-    <div id="content"></div>
+    <div class="header">
+        <h1>DEBIL_WIKI.EXE</h1>
+        <p>~/v1.337/</p>
+    </div>
+
+    <input type="text" class="search-box" placeholder="SEARCH..." id="searchInput">
+
+    <div class="loader blink">LOADING ARTICLE LIST...</div>
+
+    <div class="article-grid" id="articleGrid">
+        <!-- Статьи будут загружены через JS -->
+    </div>
+
+    <script>
+        // Список статей (можно заменить на fetch к JSON-файлу)
+        const articles = [
+            { id: "sonic", title: "🔵 SONIC", desc: "Синий ёж терминатор" },
+            { id: "sega", title: "🔴 SEGA", desc: "Японцы, которые подарили нам детство" },
+            { id: "sowu1337", title: "💻 SOWU1337", desc: "Тот самый чел с гитарой и кодом" },
+            { id: "катятя-в-галстуке", title: "🐱 КОТ С ГАЛСТУКОМ", desc: "Ахуенный друг с GitHub Pages" }
+        ];
+
+        // Имитация загрузки
+        setTimeout(() => {
+            document.querySelector('.loader').remove();
+            renderArticles(articles);
+        }, 1500);
+
+        // Рендер статей
+        function renderArticles(list) {
+            const grid = document.getElementById('articleGrid');
+            grid.innerHTML = list.map(article => `
+                <div class="article-card" onclick="location.href='/${article.id}/'">
+                    <h3>${article.title}</h3>
+                    <p>${article.desc}</p>
+                </div>
+            `).join('');
+        }
+
+        // Поиск (клиентский)
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = articles.filter(article => 
+                article.title.toLowerCase().includes(term) || 
+                article.desc.toLowerCase().includes(term)
+            );
+            renderArticles(filtered);
+        });
+    </script>
 </body>
 </html>
